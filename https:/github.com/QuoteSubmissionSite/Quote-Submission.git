@@ -1,0 +1,124 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<title>Quote Submission</title>
+	<style>
+		body {
+			background-color: #F5F5F5;
+			font-family: Arial, sans-serif;
+		}
+
+		h1 {
+			color: #333;
+			text-align: center;
+			margin-top: 50px;
+		}
+
+		form {
+			max-width: 400px;
+			margin: 0 auto;
+			padding: 20px;
+			border: 1px solid #ddd;
+			border-radius: 5px;
+			background-color: #fff;
+			box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+		}
+
+		input[type="text"] {
+			width: 100%;
+			padding: 10px;
+			margin-bottom: 10px;
+			border: 1px solid #ddd;
+			border-radius: 5px;
+		}
+
+		input[type="submit"] {
+			display: block;
+			margin: auto;
+			padding: 10px 20px;
+			background-color: #2196F3;
+			color: #fff;
+			border: none;
+			border-radius: 5px;
+			cursor: pointer;
+			transition: background-color 0.3s ease;
+		}
+
+		input[type="submit"]:hover {
+			background-color: #1976D2;
+		}
+
+		.quote {
+			margin: 20px auto;
+			max-width: 500px;
+			padding: 20px;
+			border: 1px solid #ddd;
+			border-radius: 5px;
+			background-color: #fff;
+			box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+		}
+
+		.quote p {
+			margin: 0;
+			font-style: italic;
+		}
+
+		.quote span {
+			display: block;
+			text-align: right;
+			font-weight: bold;
+			margin-top: 10px;
+		}
+	</style>
+</head>
+<body>
+	<h1>Quote Submission</h1>
+	<form id="quote-form">
+		<label for="quote-text">Quote:</label>
+		<input type="text" id="quote-text" name="quote-text" placeholder="Enter your quote...">
+		<label for="quote-author">Author:</label>
+		<input type="text" id="quote-author" name="quote-author" placeholder="Enter the author's name...">
+		<input type="submit" value="Submit Quote">
+	</form>
+
+	<div id="quote-container">
+		<!-- Quotes will be added dynamically here -->
+	</div>
+
+	<script>
+		const quoteForm = document.querySelector('#quote-form');
+		const quoteContainer = document.querySelector('#quote-container');
+		let quotes = JSON.parse(localStorage.getItem('quotes')) || [];
+
+		quoteForm.addEventListener('submit', (event) => {
+			event.preventDefault();
+			const quoteText = document.querySelector('#quote-text').value;
+			const quoteAuthor = document.querySelector('#quote-author').value;
+			const newQuote = {
+				text: quoteText,
+				author: quoteAuthor
+			};
+			quotes.push(newQuote);
+			localStorage.setItem('quotes', JSON.stringify(quotes));
+			displayQuotes();
+			quoteForm.reset();
+		});
+
+		function displayQuotes() {
+			quoteContainer.innerHTML = '';
+			for (let i = 0; i < quotes.length; i++) {
+				const quote = quotes[i];
+				const quoteElement = document.createElement('div');
+				quoteElement.classList.add('quote');
+				quoteElement.innerHTML = `
+					<p>"${quote.text}"</p>
+					<span>- ${quote.author}</span>
+				`;
+				quoteContainer.appendChild(quoteElement);
+			}
+		}
+
+		displayQuotes();
+	</script>
+</body>
+</html>
